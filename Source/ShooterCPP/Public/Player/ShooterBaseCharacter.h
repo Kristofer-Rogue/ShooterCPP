@@ -7,6 +7,7 @@
 #include "ShooterBaseCharacter.generated.h"
 
 class UCameraComponent;
+class USpringArmComponent;
 
 UCLASS()
 class SHOOTERCPP_API AShooterBaseCharacter : public ACharacter
@@ -18,7 +19,8 @@ public:
 	AShooterBaseCharacter();
 
 protected:
-
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	USpringArmComponent* SpringArmComponent;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	UCameraComponent* CameraComponent;
 
@@ -35,4 +37,7 @@ public:
 private:
 	void MoveForward(float Amount);
 	void MoveRight(float Amount);
+
+	void LookUp(float Amount);
+	void TurnAround(float Amount);
 };
