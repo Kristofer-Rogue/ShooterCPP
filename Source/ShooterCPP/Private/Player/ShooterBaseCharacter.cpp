@@ -37,6 +37,8 @@ void AShooterBaseCharacter::BeginPlay()
 	OnHealthChanged(HealthComponent->GetHealth());
 	HealthComponent->OnDeath.AddUObject(this, &AShooterBaseCharacter::OnDeath);
 	HealthComponent->OnHealthChanged.AddUObject(this, &AShooterBaseCharacter ::OnHealthChanged);
+
+	LandedDelegate.AddDynamic(this, &AShooterBaseCharacter::OnGroundLanded);
 }
 
 void AShooterBaseCharacter::Tick(float DeltaTime)
@@ -106,7 +108,7 @@ void AShooterBaseCharacter::OnDeath()
 
 	GetCharacterMovement()->DisableMovement();
 
-	SetLifeSpan(5.0f);
+	SetLifeSpan(LifeSpanOnDeath);
 	if (Controller)
 	{
 		Controller->ChangeState(NAME_Spectating);
@@ -116,4 +118,14 @@ void AShooterBaseCharacter::OnDeath()
 void AShooterBaseCharacter::OnHealthChanged(float Health)
 {
 	HealthTextComponent->SetText(FText::FromString(FString::Printf(TEXT("%.0f"), Health)));
+}
+
+void AShooterBaseCharacter::OnGroundLanded(const FHitResult& Hit)
+{
+	const auto FallVelocityZ = -GetVelocity().Z;
+	if (FallVelocityZ < LandedDamageVelocity.X)
+		return;
+
+	const auto FinalDamage = FMath::GetMappedRangeValueUnclamped(LandedDamageVelocity, LandedDamage, FallVelocityZ);
+	TakeDamage(FinalDamage, FDamageEvent{}, nullptr, nullptr);
 }
