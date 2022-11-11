@@ -7,11 +7,10 @@
 #include "ShooterPlayerController.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class SHOOTERCPP_API AShooterPlayerController : public APlayerController
 {
 	GENERATED_BODY()
-	
 };

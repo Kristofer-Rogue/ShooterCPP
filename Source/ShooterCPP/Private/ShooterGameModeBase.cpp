@@ -1,6 +1,5 @@
 // ShooterGame. All Rights Reserved.
 
-
 #include "ShooterGameModeBase.h"
 #include "Player/ShooterBaseCharacter.h"
 #include "Player/ShooterPlayerController.h"
