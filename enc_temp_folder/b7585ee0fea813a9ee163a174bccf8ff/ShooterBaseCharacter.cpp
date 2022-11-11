@@ -33,7 +33,6 @@ void AShooterBaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	OnHealthChanged(HealthComponent->GetHealth());
 	HealthComponent->OnDeath.AddUObject(this, &AShooterBaseCharacter::OnDeath);
 	HealthComponent->OnHealthChanged.AddUObject(this, &AShooterBaseCharacter ::OnHealthChanged);
 }
