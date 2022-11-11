@@ -9,6 +9,7 @@
 #include "Components/ShooterHealthComponent.h"
 #include "Components/TextRenderComponent.h"
 #include "GameFramework/Controller.h"
+#include "Weapon/ShooterBaseWeapon.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogBaseCharacter, All, All);
 
@@ -20,6 +21,7 @@ AShooterBaseCharacter::AShooterBaseCharacter(const FObjectInitializer& ObjInit)
 	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>("SpringArmComponent");
 	SpringArmComponent->SetupAttachment(GetRootComponent());
 	SpringArmComponent->bUsePawnControlRotation = true;
+	SpringArmComponent->SocketOffset = FVector(0.0f, 100.0f, 80.0f);
 
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
 	CameraComponent->SetupAttachment(SpringArmComponent);
@@ -28,6 +30,7 @@ AShooterBaseCharacter::AShooterBaseCharacter(const FObjectInitializer& ObjInit)
 
 	HealthTextComponent = CreateDefaultSubobject<UTextRenderComponent>("HealthTextComponent");
 	HealthTextComponent->SetupAttachment(GetRootComponent());
+	HealthTextComponent->SetOwnerNoSee(true);
 }
 
 void AShooterBaseCharacter::BeginPlay()
@@ -39,6 +42,8 @@ void AShooterBaseCharacter::BeginPlay()
 	HealthComponent->OnHealthChanged.AddUObject(this, &AShooterBaseCharacter ::OnHealthChanged);
 
 	LandedDelegate.AddDynamic(this, &AShooterBaseCharacter::OnGroundLanded);
+
+	SpawnWeapon();
 }
 
 void AShooterBaseCharacter::Tick(float DeltaTime)
@@ -129,3 +134,15 @@ void AShooterBaseCharacter::OnGroundLanded(const FHitResult& Hit)
 	const auto FinalDamage = FMath::GetMappedRangeValueUnclamped(LandedDamageVelocity, LandedDamage, FallVelocityZ);
 	TakeDamage(FinalDamage, FDamageEvent{}, nullptr, nullptr);
 }
+
+void AShooterBaseCharacter::SpawnWeapon()
+{
+	if (!GetWorld())
+		return;
+	const auto Weapon = GetWorld()->SpawnActor<AShooterBaseWeapon>(WeaponClass);
+	if (Weapon)
+	{
+		FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, false);
+		Weapon->AttachToComponent(GetMesh(), AttachmentRules, "WeaponSocket");
+	}
+} 
