@@ -4,6 +4,8 @@
 #include "DrawDebugHelpers.h"
 #include "Kismet/GameplayStatics.h"
 
+DEFINE_LOG_CATEGORY_STATIC(LogDevDamage, All, All);
+
 AShooterDevDamageActor::AShooterDevDamageActor()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -22,5 +24,6 @@ void AShooterDevDamageActor::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	DrawDebugSphere(GetWorld(), GetActorLocation(), Radius, 24, SphereColor);
+	
 	UGameplayStatics::ApplyRadialDamage(GetWorld(), Damage, GetActorLocation(), Radius, DamageType, {}, this, nullptr, DoFullDamage);
 }

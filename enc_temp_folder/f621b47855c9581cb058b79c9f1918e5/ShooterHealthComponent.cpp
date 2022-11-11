@@ -26,12 +26,13 @@ void UShooterHealthComponent::BeginPlay()
 
 void UShooterHealthComponent::OnTakeAnyDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
 {
-	if (Damage <= 0.0f || IsDead() || !GetWorld())
+	GetWorld()->GetTimerManager().ClearTimer(HealTimerHandle);
+	if (Damage <= 0.0f || IsDead() || GetWorld())
 		return;
 
 	SetHealth(Health - Damage);
-
-	GetWorld()->GetTimerManager().ClearTimer(HealTimerHandle);
+	UE_LOG(LogHealthComponent, Display, TEXT("Now health is %f"), Health);
+	
 
 	if (IsDead())
 	{
@@ -55,6 +56,7 @@ void UShooterHealthComponent::HealUpdate()
 
 void UShooterHealthComponent::SetHealth(float NewHealth)
 {
+	UE_LOG(LogHealthComponent, Display, TEXT("Now health is %f"), NewHealth);
 	Health = FMath::Clamp(NewHealth, 0.0f, MaxHealth);
 	OnHealthChanged.Broadcast(Health);
 }
