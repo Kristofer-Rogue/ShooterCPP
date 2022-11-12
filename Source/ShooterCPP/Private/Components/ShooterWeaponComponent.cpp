@@ -9,11 +9,18 @@ UShooterWeaponComponent::UShooterWeaponComponent()
 	PrimaryComponentTick.bCanEverTick = false;
 }
 
-void UShooterWeaponComponent::Fire()
+void UShooterWeaponComponent::StartFire()
 {
 	if (!CurrentWeapon)
 		return;
-	CurrentWeapon->Fire();
+	CurrentWeapon->StartFire();
+}
+
+void UShooterWeaponComponent::StopFire()
+{
+	if (!CurrentWeapon)
+		return;
+	CurrentWeapon->StopFire();
 }
 
 void UShooterWeaponComponent::BeginPlay()

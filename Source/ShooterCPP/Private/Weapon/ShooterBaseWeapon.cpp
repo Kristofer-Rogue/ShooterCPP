@@ -17,9 +17,15 @@ AShooterBaseWeapon::AShooterBaseWeapon()
 	SetRootComponent(WeaponMesh);
 }
 
-void AShooterBaseWeapon::Fire()
+void AShooterBaseWeapon::StartFire()
 {
 	MakeShot();
+	GetWorldTimerManager().SetTimer(ShotTimerHandle, this, &AShooterBaseWeapon::MakeShot, TimeBetweenShots, true);
+}
+
+void AShooterBaseWeapon::StopFire()
+{
+	GetWorldTimerManager().ClearTimer(ShotTimerHandle);
 }
 
 void AShooterBaseWeapon::BeginPlay()
@@ -83,7 +89,8 @@ bool AShooterBaseWeapon::GetTraceData(FVector& TraceStart, FVector& TraceEnd) co
 		return false;
 
 	TraceStart = ViewLocation;
-	const FVector ShootDirection = ViewRotation.Vector();
+	const auto HalfRad = FMath::DegreesToRadians(BulletSpread);
+	const FVector ShootDirection = FMath::VRandCone(ViewRotation.Vector(), HalfRad);
 	TraceEnd = TraceStart + ShootDirection * TraceMaxDistance;
 	return true;
 }
