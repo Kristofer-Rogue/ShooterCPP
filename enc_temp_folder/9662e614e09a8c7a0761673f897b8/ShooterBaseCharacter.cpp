@@ -125,7 +125,6 @@ void AShooterBaseCharacter::OnDeath()
 		Controller->ChangeState(NAME_Spectating);
 	}
 	GetCapsuleComponent()->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
-	WeaponComponent->StopFire();
 }
 
 void AShooterBaseCharacter::OnHealthChanged(float Health)

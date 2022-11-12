@@ -31,18 +31,6 @@ void UShooterWeaponComponent::BeginPlay()
 	EquipWeapon(CurrentWeaponIndex);
 }
 
-void UShooterWeaponComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
-{
-	CurrentWeapon = nullptr;
-	for (auto Weapon : Weapons)
-	{
-		Weapon->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-		Weapon->Destroy();
-	}
-	Weapons.Empty();
-	Super::EndPlay(EndPlayReason);
-}
-
 void UShooterWeaponComponent::SpawnWeapons()
 {
 	ACharacter* Character = Cast<ACharacter>(GetOwner());
@@ -78,7 +66,6 @@ void UShooterWeaponComponent::EquipWeapon(int32 WeaponIndex)
 
 	if (CurrentWeapon)
 	{
-		CurrentWeapon->StopFire();
 		AttachWeaponToSocket(CurrentWeapon, Character->GetMesh(), WeaponArmorySocketName);
 	}
 
