@@ -14,6 +14,8 @@ class SHOOTERCPP_API AShooterBaseWeapon : public AActor
 public:
 	AShooterBaseWeapon();
 
+	virtual void Fire();
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	USkeletalMeshComponent* WeaponMesh;

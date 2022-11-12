@@ -9,7 +9,7 @@
 #include "Components/ShooterHealthComponent.h"
 #include "Components/TextRenderComponent.h"
 #include "GameFramework/Controller.h"
-#include "Weapon/ShooterBaseWeapon.h"
+#include "Components/ShooterWeaponComponent.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogBaseCharacter, All, All);
 
@@ -28,6 +28,8 @@ AShooterBaseCharacter::AShooterBaseCharacter(const FObjectInitializer& ObjInit)
 
 	HealthComponent = CreateDefaultSubobject<UShooterHealthComponent>("HealthComponent");
 
+	WeaponComponent = CreateDefaultSubobject<UShooterWeaponComponent>("WeaponComponent");
+
 	HealthTextComponent = CreateDefaultSubobject<UTextRenderComponent>("HealthTextComponent");
 	HealthTextComponent->SetupAttachment(GetRootComponent());
 	HealthTextComponent->SetOwnerNoSee(true);
@@ -42,8 +44,6 @@ void AShooterBaseCharacter::BeginPlay()
 	HealthComponent->OnHealthChanged.AddUObject(this, &AShooterBaseCharacter ::OnHealthChanged);
 
 	LandedDelegate.AddDynamic(this, &AShooterBaseCharacter::OnGroundLanded);
-
-	SpawnWeapon();
 }
 
 void AShooterBaseCharacter::Tick(float DeltaTime)
@@ -56,6 +56,8 @@ void AShooterBaseCharacter::Tick(float DeltaTime)
 void AShooterBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	check(PlayerInputComponent);
+	check(WeaponComponent);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AShooterBaseCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AShooterBaseCharacter::MoveRight);
@@ -64,6 +66,7 @@ void AShooterBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AShooterBaseCharacter::Jump);
 	PlayerInputComponent->BindAction("Run", IE_Pressed, this, &AShooterBaseCharacter::OnStartRunning);
 	PlayerInputComponent->BindAction("Run", IE_Released, this, &AShooterBaseCharacter::OnStopRunning);
+	PlayerInputComponent->BindAction("Fire", IE_Pressed, WeaponComponent, &UShooterWeaponComponent::Fire);
 }
 
 bool AShooterBaseCharacter::IsRunning() const
@@ -135,14 +138,4 @@ void AShooterBaseCharacter::OnGroundLanded(const FHitResult& Hit)
 	TakeDamage(FinalDamage, FDamageEvent{}, nullptr, nullptr);
 }
 
-void AShooterBaseCharacter::SpawnWeapon()
-{
-	if (!GetWorld())
-		return;
-	const auto Weapon = GetWorld()->SpawnActor<AShooterBaseWeapon>(WeaponClass);
-	if (Weapon)
-	{
-		FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, false);
-		Weapon->AttachToComponent(GetMesh(), AttachmentRules, "WeaponSocket");
-	}
-} 
+
