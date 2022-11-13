@@ -7,8 +7,6 @@
 #include "ShooterCoreTypes.h"
 #include "ShooterBaseWeapon.generated.h"
 
-
-
 UCLASS()
 class SHOOTERCPP_API AShooterBaseWeapon : public AActor
 {
@@ -17,13 +15,15 @@ class SHOOTERCPP_API AShooterBaseWeapon : public AActor
 public:
 	AShooterBaseWeapon();
 
+	FOnClipEmptySignature OnClipEmpty;
+
 	virtual void StartFire();
 	virtual void StopFire();
-
+	
 	void ChangeClip();
 	bool CanReload() const;
 
-	FOnClipEmptySignature OnClipEmpty;
+	FWeaponUIData GetUIData() const { return UIData; }
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
@@ -38,6 +38,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
 	FAmmoData DefaultAmmo{ 15, 10, false };
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
+	FWeaponUIData UIData;
+
 	virtual void BeginPlay() override;
 	virtual bool GetTraceData(FVector& TraceStart, FVector& TraceEnd) const;
 	virtual void MakeShot();
@@ -50,10 +53,9 @@ protected:
 	void DecreaseAmmo();
 	bool IsAmmoEmpty() const;
 	bool IsClipEmpty() const;
-	
+
 	void LogAmmo();
 
 private:
 	FAmmoData CurrentAmmo;
 };
-
