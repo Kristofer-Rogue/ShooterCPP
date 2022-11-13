@@ -5,8 +5,9 @@
 
 void AShooterRifleWeapon::StartFire()
 {
-	MakeShot();
+	
 	GetWorldTimerManager().SetTimer(ShotTimerHandle, this, &AShooterRifleWeapon::MakeShot, TimeBetweenShots, true);
+	MakeShot();
 }
 
 void AShooterRifleWeapon::StopFire()
@@ -16,16 +17,22 @@ void AShooterRifleWeapon::StopFire()
 
 void AShooterRifleWeapon::MakeShot()
 {
-	if (!GetWorld())
+	if (!GetWorld() || IsAmmoEmpty())
+	{
+		StopFire();
 		return;
+	} 
 
 	FVector TraceStart, TraceEnd;
 	if (!GetTraceData(TraceStart, TraceEnd))
+	{
+		StopFire();
 		return;
+	}
 
 	FHitResult HitResult;
 	MakeHit(HitResult, TraceStart, TraceEnd);
-
+	
 	if (HitResult.bBlockingHit)
 	{
 		MakeDamage(HitResult);
@@ -36,6 +43,8 @@ void AShooterRifleWeapon::MakeShot()
 	{
 		DrawDebugLine(GetWorld(), GetMuzzleWorldLocation(), TraceEnd, FColor::Red, false, 3.0f, 0, 3.0f);
 	}
+
+	DecreaseAmmo();
 }
 
 bool AShooterRifleWeapon::GetTraceData(FVector& TraceStart, FVector& TraceEnd) const

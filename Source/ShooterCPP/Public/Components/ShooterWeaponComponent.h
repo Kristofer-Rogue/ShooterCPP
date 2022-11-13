@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "ShooterCoreTypes.h"
 #include "ShooterWeaponComponent.generated.h"
 
 class AShooterBaseWeapon;
@@ -19,10 +20,11 @@ public:
 	void StartFire();
 	void StopFire();
 	void NextWeapon();
+	void Reload();
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
-	TArray<TSubclassOf<AShooterBaseWeapon>> WeaponClasses;
+	TArray<FWeaponData> WeaponsData;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
 	FName WeaponEquipSocketName = "WeaponSocket";
@@ -43,8 +45,12 @@ private:
 	UPROPERTY()
 	TArray<AShooterBaseWeapon*> Weapons;
 
+	UPROPERTY()
+	UAnimMontage* CurentReloadAnimMontage = nullptr;
+
 	int32 CurrentWeaponIndex = 0;
 	bool EquipAnimInProgress = false; 
+	bool ReloadAnimInProgress = false; 
 
 	void SpawnWeapons();
 	void AttachWeaponToSocket(AShooterBaseWeapon* Weapon, USceneComponent* SceneComponent, const FName& SocketName);
@@ -52,9 +58,14 @@ private:
 	
 	void PlayAnimMontage(UAnimMontage* Animation);
 	void InitAnimations();
+
 	void OnEquipFinished(USkeletalMeshComponent* MeshComponent);
+	void OnReloadFinished(USkeletalMeshComponent* MeshComponent);
 
 	bool CanFire() const;
 	bool CanEquip() const;
+	bool CanReload() const;
 
+	void OnEmptyClip();
+	void ChangeClip();
 };

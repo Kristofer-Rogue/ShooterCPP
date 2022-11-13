@@ -19,22 +19,24 @@ AShooterBaseWeapon::AShooterBaseWeapon()
 
 void AShooterBaseWeapon::StartFire()
 {
-
 }
 
 void AShooterBaseWeapon::StopFire()
 {
-
 }
 
 void AShooterBaseWeapon::BeginPlay()
 {
 	Super::BeginPlay();
+
+	check(WeaponMesh);
+	checkf(DefaultAmmo.Bullets > 0, TEXT("Bullets count could't be less or equal zero"));
+	checkf(DefaultAmmo.Clips > 0, TEXT("Clips count could't be less or equal zero"));
+	CurrentAmmo = DefaultAmmo;
 }
 
 void AShooterBaseWeapon::MakeShot()
 {
-
 }
 
 APlayerController* AShooterBaseWeapon::GetPlayerController() const
@@ -82,4 +84,58 @@ void AShooterBaseWeapon::MakeHit(FHitResult& HitResult, const FVector& TraceStar
 	CollisionParams.AddIgnoredActor(GetOwner());
 
 	GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECollisionChannel::ECC_Visibility, CollisionParams);
+}
+
+void AShooterBaseWeapon::DecreaseAmmo()
+{
+	if (CurrentAmmo.Clips == 0)
+	{
+		UE_LOG(LogBaseWeapon, Warning, TEXT("Clip is Empty"));
+		return;
+	}
+	CurrentAmmo.Bullets--;
+	LogAmmo();
+
+	if (IsClipEmpty() && !IsAmmoEmpty())
+	{
+		StopFire();
+		OnClipEmpty.Broadcast();
+	}
+}
+
+bool AShooterBaseWeapon::IsAmmoEmpty() const
+{
+	return !CurrentAmmo.Infinite && CurrentAmmo.Clips == 0 && IsClipEmpty();
+}
+
+bool AShooterBaseWeapon::IsClipEmpty() const
+{
+	return CurrentAmmo.Bullets == 0;
+}
+
+void AShooterBaseWeapon::ChangeClip()
+{
+	if (!CurrentAmmo.Infinite)
+	{
+		if (CurrentAmmo.Clips == 0)
+		{
+			UE_LOG(LogBaseWeapon, Warning, TEXT("No more clips"));
+			return;
+		}
+		CurrentAmmo.Clips--;
+	}
+	CurrentAmmo.Bullets = DefaultAmmo.Bullets;
+	UE_LOG(LogBaseWeapon, Display, TEXT("Change Clip"));
+}
+
+bool AShooterBaseWeapon::CanReload() const
+{
+	return CurrentAmmo.Bullets < DefaultAmmo.Bullets && CurrentAmmo.Clips > 0;
+}
+
+void AShooterBaseWeapon::LogAmmo()
+{
+	FString AmmoInfo = "Ammo: " + FString::FromInt(CurrentAmmo.Bullets) + " / ";
+	AmmoInfo += CurrentAmmo.Infinite ? "Infinite" : FString::FromInt(CurrentAmmo.Clips);
+	UE_LOG(LogBaseWeapon, Display, TEXT("%s"), *AmmoInfo);
 }
