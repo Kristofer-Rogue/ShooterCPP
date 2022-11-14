@@ -11,20 +11,6 @@ UShooterHealthComponent::UShooterHealthComponent()
 	PrimaryComponentTick.bCanEverTick = false;
 }
 
-bool UShooterHealthComponent::TryToAddHealth(float HealthAmount)
-{
-	if (IsDead() || IsHealthFull())
-		return false;
-
-	SetHealth(Health + MaxHealth);
-	return true;
-}
-
-bool UShooterHealthComponent::IsHealthFull() const
-{
-	return FMath::IsNearlyEqual(Health, MaxHealth);
-}
-
 void UShooterHealthComponent::BeginPlay()
 {
 	Super::BeginPlay();
@@ -63,7 +49,7 @@ void UShooterHealthComponent::HealUpdate()
 {
 	SetHealth(Health + HealModifier);
 
-	if (IsHealthFull() && GetWorld())
+	if (FMath::IsNearlyEqual(Health, MaxHealth) && GetWorld())
 	{
 		GetWorld()->GetTimerManager().ClearTimer(HealTimerHandle);
 	} 

@@ -88,7 +88,7 @@ void AShooterBaseWeapon::MakeHit(FHitResult& HitResult, const FVector& TraceStar
 
 void AShooterBaseWeapon::DecreaseAmmo()
 {
-	if (CurrentAmmo.Bullets == 0)
+	if (CurrentAmmo.Clips == 0)
 	{
 		UE_LOG(LogBaseWeapon, Warning, TEXT("Clip is Empty"));
 		return;
