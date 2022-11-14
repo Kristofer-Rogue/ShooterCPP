@@ -39,6 +39,7 @@ void AShooterBasePickup::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	AddActorLocalRotation(FRotator(0.0f, RotationYaw, 0.0f));
+	AddActorLocalOffset({ 0, 0, AmplitudeZ * FMath::Sin(FrequencyZ * GetWorld()->GetTimeSeconds()) });
 }
 
 bool AShooterBasePickup::GivePickupTo(APawn* PlayerPawn)

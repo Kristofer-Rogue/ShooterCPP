@@ -30,6 +30,12 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
+	UPROPERTY(EditAnywhere, Category = "Pickup")
+	float AmplitudeZ = 0.5f;
+
+	UPROPERTY(EditAnywhere, Category = "Pickup")
+	float FrequencyZ = 2.0f;
+
 	float RotationYaw = 0.0f;
 
 	virtual bool GivePickupTo(APawn* PlayerPawn);
