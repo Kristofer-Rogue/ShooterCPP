@@ -201,7 +201,7 @@ void UShooterWeaponComponent::Reload()
 	ChangeClip();
 }
 
-bool UShooterWeaponComponent::GetWeaponUIData(FWeaponUIData& UIData) const
+bool UShooterWeaponComponent::GetCurrentWeaponUIData(FWeaponUIData& UIData) const
 {
 	if (CurrentWeapon)
 	{
@@ -209,4 +209,14 @@ bool UShooterWeaponComponent::GetWeaponUIData(FWeaponUIData& UIData) const
 		return true;
 	}
 	return false;
+}
+
+bool UShooterWeaponComponent::GetCurrentWeaponAmmoData(FAmmoData& AmmoData) const
+{
+	if (CurrentWeapon)
+	{
+		AmmoData = CurrentWeapon->GetAmmoData();
+		return true;
+	}
+	return false; 
 }

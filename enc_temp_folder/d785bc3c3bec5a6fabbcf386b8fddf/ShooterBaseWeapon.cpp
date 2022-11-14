@@ -94,6 +94,7 @@ void AShooterBaseWeapon::DecreaseAmmo()
 		return;
 	}
 	CurrentAmmo.Bullets--;
+	LogAmmo();
 
 	if (IsClipEmpty() && !IsAmmoEmpty())
 	{

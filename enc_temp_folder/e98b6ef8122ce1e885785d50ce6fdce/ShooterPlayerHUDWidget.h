@@ -7,6 +7,8 @@
 #include "ShooterCoreTypes.h"
 #include "ShooterPlayerHUDWidget.generated.h"
 
+class UShooterWeaponComponent;
+
 UCLASS()
 class SHOOTERCPP_API UShooterPlayerHUDWidget : public UUserWidget
 {
@@ -22,9 +24,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "UI")
 	bool GetCurrentWeaponAmmoData(FAmmoData& AmmoData) const;
 
-	UFUNCTION(BlueprintCallable, Category = "UI")
-	bool IsPlayerAlive() const;
-
-	UFUNCTION(BlueprintCallable, Category = "UI")
-	bool IsPlayerSpectating() const;
+private:
+	UShooterWeaponComponent* GetWeaponComponent() const;
 };
