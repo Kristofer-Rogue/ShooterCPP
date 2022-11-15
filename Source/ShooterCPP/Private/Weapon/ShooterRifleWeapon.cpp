@@ -1,11 +1,22 @@
 // ShooterGame. All Rights Reserved.
 
-
 #include "Weapon/ShooterRifleWeapon.h"
+#include "Weapon/Components/ShooterWeaponVFXComponent.h"
+
+AShooterRifleWeapon::AShooterRifleWeapon()
+{
+	WeaponFXComponent = CreateDefaultSubobject<UShooterWeaponVFXComponent>("WeaponFXComponent");
+}
+
+void AShooterRifleWeapon::BeginPlay()
+{
+	Super::BeginPlay();
+	check(WeaponFXComponent);
+}
 
 void AShooterRifleWeapon::StartFire()
 {
-	
+
 	GetWorldTimerManager().SetTimer(ShotTimerHandle, this, &AShooterRifleWeapon::MakeShot, TimeBetweenShots, true);
 	MakeShot();
 }
@@ -21,7 +32,7 @@ void AShooterRifleWeapon::MakeShot()
 	{
 		StopFire();
 		return;
-	} 
+	}
 
 	FVector TraceStart, TraceEnd;
 	if (!GetTraceData(TraceStart, TraceEnd))
@@ -32,12 +43,13 @@ void AShooterRifleWeapon::MakeShot()
 
 	FHitResult HitResult;
 	MakeHit(HitResult, TraceStart, TraceEnd);
-	
+
 	if (HitResult.bBlockingHit)
 	{
 		MakeDamage(HitResult);
-		DrawDebugLine(GetWorld(), GetMuzzleWorldLocation(), HitResult.ImpactPoint, FColor::Red, false, 3.0f, 0, 3.0f);
-		DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10.0f, 24, FColor::Red, false, 10.0f);
+		// DrawDebugLine(GetWorld(), GetMuzzleWorldLocation(), HitResult.ImpactPoint, FColor::Red, false, 3.0f, 0, 3.0f);
+		// DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10.0f, 24, FColor::Red, false, 10.0f);
+		WeaponFXComponent->PlayImpactFX(HitResult);
 	}
 	else
 	{

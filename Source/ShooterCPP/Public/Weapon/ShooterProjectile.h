@@ -8,6 +8,7 @@
 
 class USphereComponent;
 class UProjectileMovementComponent;
+class UShooterWeaponVFXComponent;
 
 UCLASS()
 class SHOOTERCPP_API AShooterProjectile : public AActor
@@ -37,6 +38,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
 	float LifeSeconds = 5;
+
+	UPROPERTY(VisibleAnywhere, Category = "VFX")
+	UShooterWeaponVFXComponent* WeaponFXComponent;
 
 	virtual void BeginPlay() override;
 
