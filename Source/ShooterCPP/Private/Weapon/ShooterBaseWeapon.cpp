@@ -6,6 +6,8 @@
 #include "DrawDebugHelpers.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/Controller.h"
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogBaseWeapon, All, All);
 
@@ -115,7 +117,7 @@ bool AShooterBaseWeapon::IsClipEmpty() const
 
 bool AShooterBaseWeapon::IsAmmoFull() const
 {
-	return CurrentAmmo.Clips == DefaultAmmo.Clips&& //
+	return CurrentAmmo.Clips == DefaultAmmo.Clips && //
 		CurrentAmmo.Bullets == DefaultAmmo.Bullets;
 }
 
@@ -149,7 +151,7 @@ bool AShooterBaseWeapon::TryToAddAmmo(int32 ClipsAmount)
 		CurrentAmmo.Clips = DefaultAmmo.Clips + 1;
 		OnClipEmpty.Broadcast();
 	}
-	else if (CurrentAmmo.Clips< DefaultAmmo.Clips)
+	else if (CurrentAmmo.Clips < DefaultAmmo.Clips)
 	{
 		CurrentAmmo.Clips = FMath::Clamp(CurrentAmmo.Clips + ClipsAmount, 0, DefaultAmmo.Clips);
 	}
@@ -166,4 +168,15 @@ void AShooterBaseWeapon::LogAmmo()
 	FString AmmoInfo = "Ammo: " + FString::FromInt(CurrentAmmo.Bullets) + " / ";
 	AmmoInfo += CurrentAmmo.Infinite ? "Infinite" : FString::FromInt(CurrentAmmo.Clips);
 	UE_LOG(LogBaseWeapon, Display, TEXT("%s"), *AmmoInfo);
+}
+
+UNiagaraComponent* AShooterBaseWeapon::SpawnMuzzleFX()
+{
+	return UNiagaraFunctionLibrary::SpawnSystemAttached(MuzzleFX, //
+		WeaponMesh,												  //
+		MuzzleSocketName,										  //
+		FVector::ZeroVector,									  //
+		FRotator::ZeroRotator,									  //
+		EAttachLocation::SnapToTarget,							  //
+		true);
 }

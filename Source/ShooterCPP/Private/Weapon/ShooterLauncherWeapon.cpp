@@ -34,4 +34,5 @@ void AShooterLauncherWeapon::MakeShot()
 	}
 
 	DecreaseAmmo();
+	SpawnMuzzleFX();
 }

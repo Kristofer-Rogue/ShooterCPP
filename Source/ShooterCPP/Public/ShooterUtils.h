@@ -4,7 +4,7 @@ class ShooterUtils
 {
 public:
 	template <typename T>
-	static T* GetShooterPlayerComponent(APawn* PlayerPawn)
+	static T* GetShooterPlayerComponent(AActor* PlayerPawn)
 	{
 		if (!PlayerPawn)
 			return nullptr;

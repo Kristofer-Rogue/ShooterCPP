@@ -52,7 +52,7 @@ void AShooterProjectile::OnProjectileHit(UPrimitiveComponent* HitComponent, AAct
 		GetController(),							//
 		DoFullDamage);								//
 
-	DrawDebugSphere(GetWorld(), GetActorLocation(), DamageRadius, 24, FColor::Emerald, false, 5.0f);
+	//DrawDebugSphere(GetWorld(), GetActorLocation(), DamageRadius, 24, FColor::Emerald, false, 5.0f);
 	WeaponFXComponent->PlayImpactFX(Hit);
 	Destroy();
 }
