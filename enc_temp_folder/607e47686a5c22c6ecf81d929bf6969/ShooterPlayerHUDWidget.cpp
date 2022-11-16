@@ -43,21 +43,3 @@ bool UShooterPlayerHUDWidget::IsPlayerSpectating() const
 	const auto Controller = GetOwningPlayer();
 	return Controller && Controller->GetStateName() == NAME_Spectating;
 }
-
-bool UShooterPlayerHUDWidget::Initialize()
-{
-	const auto HealthComponent = ShooterUtils::GetShooterPlayerComponent<UShooterHealthComponent>(GetOwningPlayerPawn());
-	if (HealthComponent)
-	{
-		HealthComponent->OnHealthChanged.AddUObject(this, &UShooterPlayerHUDWidget::OnHealthChanged);
-	}
-	return Super::Initialize();
-}
-
-void UShooterPlayerHUDWidget::OnHealthChanged(float Health, float HealthDelta)
-{
-	if (HealthDelta < 0.0f)
-	{
-		OnTakeDamage();
-	}	
-}

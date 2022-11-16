@@ -71,7 +71,7 @@ private:
 	void OnStopRunning();
 
 	void OnDeath();
-	void OnHealthChanged(float Health, float HealthDelta);
+	void OnHealthChanged(float Health);
 
 	UFUNCTION()
 	void OnGroundLanded(const FHitResult& Hit);
