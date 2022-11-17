@@ -28,6 +28,7 @@ protected:
 
 public:
 	virtual void Tick(float DeltaTime) override;
+	bool CouldBeTaken() const;
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Pickup")
@@ -37,6 +38,7 @@ private:
 	float FrequencyZ = 2.0f;
 
 	float RotationYaw = 0.0f;
+	FTimerHandle RespawnTimerHandle;
 
 	virtual bool GivePickupTo(APawn* PlayerPawn);
 

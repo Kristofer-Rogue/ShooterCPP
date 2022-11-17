@@ -5,6 +5,8 @@
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
 
+DEFINE_LOG_CATEGORY_STATIC(LogRifleWeapon, All, All);
+
 AShooterRifleWeapon::AShooterRifleWeapon()
 {
 	WeaponFXComponent = CreateDefaultSubobject<UShooterWeaponVFXComponent>("WeaponFXComponent");

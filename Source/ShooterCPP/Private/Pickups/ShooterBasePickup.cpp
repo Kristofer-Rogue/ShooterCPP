@@ -42,6 +42,11 @@ void AShooterBasePickup::Tick(float DeltaTime)
 	AddActorLocalOffset({ 0, 0, AmplitudeZ * FMath::Sin(FrequencyZ * GetWorld()->GetTimeSeconds()) });
 }
 
+bool AShooterBasePickup::CouldBeTaken() const
+{
+	return !GetWorldTimerManager().IsTimerActive(RespawnTimerHandle);
+}
+
 bool AShooterBasePickup::GivePickupTo(APawn* PlayerPawn)
 {
 	return false;
@@ -54,7 +59,6 @@ void AShooterBasePickup::PickupWasTaken()
 	{
 		GetRootComponent()->SetVisibility(false, true);
 	}
-	FTimerHandle RespawnTimerHandle;
 	GetWorldTimerManager().SetTimer(RespawnTimerHandle, this, &AShooterBasePickup::Respawn, RespawnTime);
 }
 
