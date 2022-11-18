@@ -4,6 +4,8 @@
 #include "Weapon/ShooterProjectile.h"
 #include "Kismet/GameplayStatics.h"
 
+DEFINE_LOG_CATEGORY_STATIC(LauncherWeapon, All, All);
+
 void AShooterLauncherWeapon::StartFire()
 {
 	MakeShot();
@@ -18,6 +20,7 @@ void AShooterLauncherWeapon::MakeShot()
 	if (!GetTraceData(TraceStart, TraceEnd))
 		return;
 
+	UE_LOG(LauncherWeapon, Display, TEXT("LaucherStrike"));
 	FHitResult HitResult;
 	MakeHit(HitResult, TraceStart, TraceEnd);
 

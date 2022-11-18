@@ -8,9 +8,6 @@
 
 class AShooterProjectile;
 
-/**
- *
- */
 UCLASS()
 class SHOOTERCPP_API AShooterLauncherWeapon : public AShooterBaseWeapon
 {

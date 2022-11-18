@@ -159,7 +159,7 @@ void UShooterWeaponComponent::ChangeClip()
 	if (!CanReload())
 		return;
 	CurrentWeapon->StopFire();
-	CurrentWeapon->ChangeClip();
+	
 	ReloadAnimInProgress = true;
 	PlayAnimMontage(CurentReloadAnimMontage);
 }
@@ -184,6 +184,7 @@ void UShooterWeaponComponent::OnReloadFinished(USkeletalMeshComponent* MeshCompo
 	if (!Character || MeshComponent != Character->GetMesh())
 		return;
 
+	CurrentWeapon->ChangeClip();
 	ReloadAnimInProgress = false;
 }
 
