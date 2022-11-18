@@ -26,7 +26,11 @@ AActor* UShooterAIPerceptionComponent::GetClosestEnemy() const
 	for (const auto PercieveActor : PercieveActors)
 	{
 		const auto HealthComponent = ShooterUtils::GetShooterPlayerComponent<UShooterHealthComponent>(PercieveActor);
-		if (HealthComponent && !HealthComponent->IsDead())
+
+		const auto PercievePawn = Cast<APawn>(PercieveActor);
+		const auto AreEnemies = PercievePawn && ShooterUtils::AreEnemies(Controller, PercievePawn->Controller);
+
+		if (HealthComponent && !HealthComponent->IsDead() && AreEnemies)
 		{
 			const auto CurrentDistance = (PercieveActor->GetActorLocation() - Pawn->GetActorLocation()).Size();
 			if (CurrentDistance < ClosestDistance)

@@ -4,6 +4,7 @@
 #include "Weapon/Components/ShooterWeaponVFXComponent.h"
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
+#include "GameFramework/Controller.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogRifleWeapon, All, All);
 
@@ -108,5 +109,11 @@ void AShooterRifleWeapon::MakeDamage(const FHitResult& HitResult)
 	if (!DamagedActor)
 		return;
 
-	DamagedActor->TakeDamage(DamageAmount, FDamageEvent(), GetPlayerController(), this);
+	DamagedActor->TakeDamage(DamageAmount, FDamageEvent(), GetController(), this);
+}
+
+AController* AShooterRifleWeapon::GetController() const
+{
+	const auto Pawn = Cast<APawn>(GetOwner());
+	return Pawn ? Pawn->GetController() : nullptr;
 }

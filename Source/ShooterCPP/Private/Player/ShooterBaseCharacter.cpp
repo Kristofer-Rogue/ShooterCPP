@@ -93,6 +93,15 @@ float AShooterBaseCharacter::GetMovementDirection() const
 	return CrossProduct.IsZero() ? Degrees : Degrees * FMath::Sign(CrossProduct.Z);
 }
 
+void AShooterBaseCharacter::SetPlayerColor(const FLinearColor& Color)
+{
+	const auto MaterialInstance = GetMesh()->CreateAndSetMaterialInstanceDynamic(0);
+	if (!MaterialInstance)
+		return;
+
+	MaterialInstance->SetVectorParameterValue(MaterialColorName, Color);
+}
+
 void AShooterBaseCharacter::MoveForward(float Amount)
 {
 	IsMovingForward = Amount > 0.0f;

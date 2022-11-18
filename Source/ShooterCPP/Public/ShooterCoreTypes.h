@@ -33,7 +33,7 @@ struct FWeaponUIData
 };
 
 // Health
-DECLARE_MULTICAST_DELEGATE(FOnDeathSignature); 
+DECLARE_MULTICAST_DELEGATE(FOnDeathSignature);
 DECLARE_MULTICAST_DELEGATE_TwoParams(FOnHealthChangedSignature, float, float);
 
 USTRUCT(BlueprintType)
@@ -48,7 +48,7 @@ struct FWeaponData
 	UAnimMontage* ReloadAnimMontage;
 };
 
-//VFX
+// VFX
 
 class UNiagaraSystem;
 
@@ -81,4 +81,24 @@ struct FImpactData
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
 	FDecalData DecalData;
 };
- 
+
+USTRUCT(BlueprintType)
+struct FGameData
+{
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Game", meta = (ClampMin = "1", ClampMax = "100"))
+	int32 PlayersNum = 2;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Game", meta = (ClampMin = "1", ClampMax = "10"))
+	int32 RoundsNum = 4;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Game", meta = (ClampMin = "3", ClampMax = "300"))
+	int32 RoundTime = 10; 
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	FLinearColor DefaultTeamColor = FLinearColor::Red;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	TArray<FLinearColor> TeamColors;
+};

@@ -10,6 +10,8 @@ AShooterAIController::AShooterAIController()
 {
 	ShooterAIPerceptionComponent = CreateDefaultSubobject<UShooterAIPerceptionComponent>("ShooterPerceptionComponent");
 	SetPerceptionComponent(*ShooterAIPerceptionComponent);
+
+	bWantsPlayerState = true;
 }
 
 void AShooterAIController::OnPossess(APawn* InPawn)
