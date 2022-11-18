@@ -239,7 +239,7 @@ bool UShooterWeaponComponent::NeedAmmo(TSubclassOf<AShooterBaseWeapon> WeaponTyp
 	{
 		if (Weapon && Weapon->IsA(WeaponType))
 		{
-			return !Weapon->IsAmmoFull();
+			return Weapon->NeedAmmo();
 		}
 	}
 	return false;

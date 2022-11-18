@@ -128,8 +128,13 @@ bool AShooterBaseWeapon::IsClipEmpty() const
 
 bool AShooterBaseWeapon::IsAmmoFull() const
 {
-	return CurrentAmmo.Clips == DefaultAmmo.Clips; //&& 
-		//CurrentAmmo.Bullets == DefaultAmmo.Bullets;
+	return CurrentAmmo.Clips == DefaultAmmo.Clips && 
+		CurrentAmmo.Bullets == DefaultAmmo.Bullets;
+}
+
+bool AShooterBaseWeapon::NeedAmmo() const
+{
+	return CurrentAmmo.Clips < DefaultAmmo.Clips;
 }
 
 void AShooterBaseWeapon::ChangeClip()
@@ -160,7 +165,7 @@ bool AShooterBaseWeapon::TryToAddAmmo(int32 ClipsAmount)
 
 	if (IsAmmoEmpty())
 	{
-		CurrentAmmo.Clips = DefaultAmmo.Clips + 1;
+		CurrentAmmo.Clips = FMath::Clamp(ClipsAmount, 0, DefaultAmmo.Clips + 1);
 		OnClipEmpty.Broadcast();
 	}
 	else if (CurrentAmmo.Clips < DefaultAmmo.Clips)
