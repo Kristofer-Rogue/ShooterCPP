@@ -5,11 +5,14 @@
 #include "AI/ShooterAICharacter.h"
 #include "Components/ShooterAIPerceptionComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "Components/ShooterRespawnComponent.h"
 
 AShooterAIController::AShooterAIController()
 {
 	ShooterAIPerceptionComponent = CreateDefaultSubobject<UShooterAIPerceptionComponent>("ShooterPerceptionComponent");
 	SetPerceptionComponent(*ShooterAIPerceptionComponent);
+
+	ShooterRespawnComponent = CreateDefaultSubobject<UShooterRespawnComponent>("ShooterRespawnComponent");
 
 	bWantsPlayerState = true;
 }

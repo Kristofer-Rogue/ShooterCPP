@@ -6,6 +6,8 @@
 #include "UI/ShooterGameHUD.h"
 #include "AIController.h"
 #include "Player/ShooterPlayerState.h"
+#include "ShooterUtils.h"
+#include "Components/ShooterRespawnComponent.h"
 
 AShooterGameModeBase::AShooterGameModeBase()
 {
@@ -47,6 +49,13 @@ void AShooterGameModeBase::Killed(AController* KillerController, AController* Vi
 	{
 		VictimPlayerState->AddDeath();
 	}
+
+	StartRespawn(VictimController);
+}
+
+void AShooterGameModeBase::RespawnRequest(AController* Controller)
+{
+	ResetOnePlayer(Controller);
 }
 
 void AShooterGameModeBase::SpawnBots()
@@ -179,4 +188,17 @@ void AShooterGameModeBase::LogPlayerInfo()
 
 		PlayerState->LogInfo();
 	}
+}
+
+void AShooterGameModeBase::StartRespawn(AController* Controller)
+{
+	const auto RespawnAvailable = RoundCountDown > GameData.RespawnTime * 2;
+	if (!RespawnAvailable)
+		return;
+
+	const auto RespawnComponent = ShooterUtils::GetShooterPlayerComponent<UShooterRespawnComponent>(Controller);
+	if (!RespawnComponent)
+		return;
+
+	RespawnComponent->Respawn(GameData.RespawnTime);
 }
