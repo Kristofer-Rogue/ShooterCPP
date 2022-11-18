@@ -8,6 +8,7 @@
 #include "Player/ShooterPlayerState.h"
 #include "ShooterUtils.h"
 #include "Components/ShooterRespawnComponent.h"
+#include "EngineUtils.h"
 
 AShooterGameModeBase::AShooterGameModeBase()
 {
@@ -94,7 +95,7 @@ void AShooterGameModeBase::GameTimerUpdate()
 		}
 		else
 		{
-			LogPlayerInfo();
+			GameOver();
 		}
 	}
 }
@@ -201,4 +202,18 @@ void AShooterGameModeBase::StartRespawn(AController* Controller)
 		return;
 
 	RespawnComponent->Respawn(GameData.RespawnTime);
+}
+
+void AShooterGameModeBase::GameOver()
+{
+	LogPlayerInfo();
+
+	for (auto Pawn : TActorRange<APawn>(GetWorld()))
+	{
+		if (Pawn)
+		{
+			Pawn->TurnOff();
+			Pawn->DisableInput(nullptr);
+		}
+	}
 }
