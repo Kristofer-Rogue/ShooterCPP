@@ -9,6 +9,9 @@
 #include "ShooterUtils.h"
 #include "Components/ShooterRespawnComponent.h"
 #include "EngineUtils.h"
+#include "ShooterGameInstance.h"
+
+DEFINE_LOG_CATEGORY_STATIC(LogShooterGameModeBase, All, All);
 
 AShooterGameModeBase::AShooterGameModeBase()
 {
