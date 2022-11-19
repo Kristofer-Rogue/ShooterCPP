@@ -4,6 +4,9 @@
 #include "Engine/Canvas.h"
 #include "Blueprint/UserWidget.h"
 #include "Player/ShooterPlayerHUDWidget.h"
+#include "ShooterGameModeBase.h"
+
+DEFINE_LOG_CATEGORY_STATIC(LogShooterGameHUD, All, All);
 
 void AShooterGameHUD::DrawHUD()
 {
@@ -16,10 +19,26 @@ void AShooterGameHUD::BeginPlay()
 {
 	Super::BeginPlay();
 
-	auto PlayerHUDWidget = CreateWidget<UUserWidget>(GetWorld(), PlayerHUDWidgetClass);
-	if (PlayerHUDWidget)
+	GameWidgets.Add(EShooterMatchState::InProgress, CreateWidget<UUserWidget>(GetWorld(), PlayerHUDWidgetClass));
+	GameWidgets.Add(EShooterMatchState::Pause, CreateWidget<UUserWidget>(GetWorld(), PauseWidgetClass));
+
+	for (auto GameWidgetPair : GameWidgets)
 	{
-		PlayerHUDWidget->AddToViewport();
+		const auto GameWidget = GameWidgetPair.Value;
+		if (!GameWidget)
+			continue;
+
+		GameWidget->AddToViewport();
+		GameWidget->SetVisibility(ESlateVisibility::Hidden);
+	}
+
+	if (GetWorld())
+	{
+		const auto GameMode = Cast<AShooterGameModeBase>(GetWorld()->GetAuthGameMode());
+		if (GameMode)
+		{
+			GameMode->OnMatchStateChanged.AddUObject(this, &AShooterGameHUD::OnMatchStateChanged);
+		}
 	}
 }
 
@@ -33,4 +52,22 @@ void AShooterGameHUD::DrawCrossHair()
 
 	DrawLine(Center.Min - HalfLineSize, Center.Max, Center.Min + HalfLineSize, Center.Max, LineColor, LineThickness);
 	DrawLine(Center.Min, Center.Max - HalfLineSize, Center.Min, Center.Max + HalfLineSize, LineColor, LineThickness);
+}
+
+void AShooterGameHUD::OnMatchStateChanged(EShooterMatchState State)
+{
+	if (CurrentWidget)
+	{
+		CurrentWidget->SetVisibility(ESlateVisibility::Hidden);
+	}
+
+	if (GameWidgets.Contains(State))
+	{
+		CurrentWidget = GameWidgets[State];
+	}
+
+	if (CurrentWidget)
+	{
+		CurrentWidget->SetVisibility(ESlateVisibility::Visible);
+	}
 }

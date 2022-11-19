@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include "ShooterCoreTypes.h"
 #include "ShooterPlayerController.generated.h"
 
 class UShooterRespawnComponent;
@@ -19,4 +20,11 @@ public:
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "AI")
 	UShooterRespawnComponent* ShooterRespawnComponent;
+
+	virtual void BeginPlay() override;
+	virtual void SetupInputComponent() override;
+
+private:
+	void OnPauseGame();
+	void OnMatchStateChanged(EShooterMatchState State);
 };

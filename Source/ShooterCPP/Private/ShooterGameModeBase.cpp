@@ -26,6 +26,8 @@ void AShooterGameModeBase::StartPlay()
 	CreateTeamsInfo();
 	CurrentRound = 1;
 	StartRound();
+
+	SetMatchState(EShooterMatchState::InProgress);
 }
 
 UClass* AShooterGameModeBase::GetDefaultPawnClassForController_Implementation(AController* InController)
@@ -57,6 +59,28 @@ void AShooterGameModeBase::Killed(AController* KillerController, AController* Vi
 void AShooterGameModeBase::RespawnRequest(AController* Controller)
 {
 	ResetOnePlayer(Controller);
+}
+
+bool AShooterGameModeBase::SetPause(APlayerController* PC, FCanUnpause CanUnpauseDelegate)
+{
+	const auto PauseSet = Super::SetPause(PC, CanUnpauseDelegate);
+
+	if (PauseSet)
+	{
+		SetMatchState(EShooterMatchState::Pause);
+	}
+	return PauseSet;
+}
+
+bool AShooterGameModeBase::ClearPause()
+{
+	const auto PauseCleared = Super::ClearPause();
+
+	if (PauseCleared)
+	{
+		SetMatchState(EShooterMatchState::InProgress);
+	}
+	return PauseCleared;
 }
 
 void AShooterGameModeBase::SpawnBots()
@@ -216,4 +240,14 @@ void AShooterGameModeBase::GameOver()
 			Pawn->DisableInput(nullptr);
 		}
 	}
+	SetMatchState(EShooterMatchState::GameOver);
+}
+
+void AShooterGameModeBase::SetMatchState(EShooterMatchState State)
+{
+	if (MatchState == State)
+		return;
+
+	MatchState = State;
+	OnMatchStateChanged.Broadcast(MatchState);
 }

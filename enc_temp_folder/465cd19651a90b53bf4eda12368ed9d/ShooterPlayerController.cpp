@@ -42,12 +42,10 @@ void AShooterPlayerController::OnMatchStateChanged(EShooterMatchState State)
 {
 	if (State == EShooterMatchState::InProgress)
 	{
-		SetInputMode(FInputModeGameOnly());
 		bShowMouseCursor = false;
 	}
 	else
 	{
-		SetInputMode(FInputModeUIOnly());
 		bShowMouseCursor = true;
 	}
 }
