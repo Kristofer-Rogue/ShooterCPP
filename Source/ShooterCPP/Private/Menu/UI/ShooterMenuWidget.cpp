@@ -4,6 +4,7 @@
 #include "Components/Button.h"
 #include "Kismet/GameplayStatics.h"
 #include "ShooterGameInstance.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 void UShooterMenuWidget::NativeOnInitialized()
 {
@@ -12,6 +13,10 @@ void UShooterMenuWidget::NativeOnInitialized()
 	if (StartGameButton)
 	{
 		StartGameButton->OnClicked.AddDynamic(this, &UShooterMenuWidget::OnStartGame);
+	}
+	if (QuitGameButton)
+	{
+		QuitGameButton->OnClicked.AddDynamic(this, &UShooterMenuWidget::OnQuitGame);
 	}
 }
 
@@ -28,4 +33,9 @@ void UShooterMenuWidget::OnStartGame()
 		return; 
 
 	UGameplayStatics::OpenLevel(this, ShooterGameInstance->GetStartupLevelName());
+}
+
+void UShooterMenuWidget::OnQuitGame()
+{
+	UKismetSystemLibrary::QuitGame(this, GetOwningPlayer(), EQuitPreference::Quit, true);
 }

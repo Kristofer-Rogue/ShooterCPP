@@ -13,8 +13,12 @@ class SHOOTERCPP_API UShooterGameInstance : public UGameInstance
 
 public:
 	FName GetStartupLevelName() const { return StartupLevelName; }
+	FName GetMenuLevelName() const { return MenuLevelName; }
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Game")
 	FName StartupLevelName = NAME_None;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Game")
+	FName MenuLevelName = NAME_None;
 };
