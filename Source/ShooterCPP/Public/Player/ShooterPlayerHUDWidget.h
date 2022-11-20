@@ -7,6 +7,8 @@
 #include "ShooterCoreTypes.h"
 #include "ShooterPlayerHUDWidget.generated.h"
 
+class UProgressBar;
+
 UCLASS()
 class SHOOTERCPP_API UShooterPlayerHUDWidget : public UUserWidget
 {
@@ -31,9 +33,23 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category = "UI")
 	void OnTakeDamage();
 
-private:
+protected:
+	UPROPERTY(meta = (BindWidget))
+	UProgressBar* HealthProgressBar;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
+	float PercentColodThreshold = 0.3f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
+	FLinearColor GoodColor = FLinearColor::White;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
+	FLinearColor BadColor = FLinearColor::Red;
+
 	virtual void NativeOnInitialized() override;
 
+private:
 	void OnHealthChanged(float Health, float HealthDelta);
 	void OnNewPawn(APawn* NewPawn);
+	void UpdateHealthBar();
 };

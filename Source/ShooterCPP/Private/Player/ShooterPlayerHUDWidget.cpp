@@ -4,6 +4,7 @@
 #include "Components/ShooterHealthComponent.h"
 #include "Components/ShooterWeaponComponent.h"
 #include "ShooterUtils.h"
+#include "Components/ProgressBar.h"
 
 float UShooterPlayerHUDWidget::GetHealthPercent() const
 {
@@ -60,6 +61,7 @@ void UShooterPlayerHUDWidget::OnHealthChanged(float Health, float HealthDelta)
 	{
 		OnTakeDamage();
 	}	
+	UpdateHealthBar();
 }
 
 void UShooterPlayerHUDWidget::OnNewPawn(APawn* NewPawn)
@@ -69,4 +71,13 @@ void UShooterPlayerHUDWidget::OnNewPawn(APawn* NewPawn)
 	{
 		HealthComponent->OnHealthChanged.AddUObject(this, &UShooterPlayerHUDWidget::OnHealthChanged);
 	}
+	UpdateHealthBar();
+}
+
+void UShooterPlayerHUDWidget::UpdateHealthBar()
+{
+	if (!HealthProgressBar)
+		return;
+
+	HealthProgressBar->SetFillColorAndOpacity(GetHealthPercent() > PercentColodThreshold ? GoodColor : BadColor);
 }

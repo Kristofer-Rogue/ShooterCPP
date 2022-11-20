@@ -8,7 +8,7 @@
 
 UShooterFindEnemyService::UShooterFindEnemyService()
 {
-	NodeName = "Find Name";
+	NodeName = "Find Enemy";
 }
 
 void UShooterFindEnemyService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
