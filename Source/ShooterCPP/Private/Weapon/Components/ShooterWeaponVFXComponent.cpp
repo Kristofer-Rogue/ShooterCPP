@@ -5,6 +5,7 @@
 #include "PhysicalMaterials/PhysicalMaterial.h"
 #include "Components/DecalComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Sound/SoundCue.h"
 
 UShooterWeaponVFXComponent::UShooterWeaponVFXComponent()
 {
@@ -37,6 +38,9 @@ void UShooterWeaponVFXComponent::PlayImpactFX(const FHitResult& Hit)
 		ImpactData.DecalData.Size,					   //
 		Hit.ImpactPoint,							   //
 		Hit.ImpactNormal.Rotation());
+
+	//Sound
+	UGameplayStatics::PlaySoundAtLocation(GetWorld(), ImpactData.Sound, Hit.ImpactPoint);
 
 	if (DecalComponent)
 	{

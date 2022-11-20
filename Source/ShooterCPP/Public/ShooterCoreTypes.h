@@ -3,6 +3,8 @@
 
 // Weapon
 class AShooterBaseWeapon;
+class USoundCue;
+
 DECLARE_MULTICAST_DELEGATE(FOnClipEmptySignature);
 
 USTRUCT(BlueprintType)
@@ -80,6 +82,9 @@ struct FImpactData
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
 	FDecalData DecalData;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sound")
+	USoundCue* Sound;
 };
 
 USTRUCT(BlueprintType)
