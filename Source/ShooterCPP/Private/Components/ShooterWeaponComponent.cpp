@@ -89,8 +89,10 @@ void UShooterWeaponComponent::EquipWeapon(int32 WeaponIndex)
 	if (!Character)
 		return;
 
+	Zoom(false);
 	if (CurrentWeapon)
 	{
+		
 		CurrentWeapon->StopFire();
 		AttachWeaponToSocket(CurrentWeapon, Character->GetMesh(), WeaponArmorySocketName);
 	}
@@ -244,4 +246,12 @@ bool UShooterWeaponComponent::NeedAmmo(TSubclassOf<AShooterBaseWeapon> WeaponTyp
 		}
 	}
 	return false;
+}
+
+void UShooterWeaponComponent::Zoom(bool Enabled)
+{
+	if (CurrentWeapon)
+	{
+		CurrentWeapon->Zoom(Enabled);
+	}
 }
