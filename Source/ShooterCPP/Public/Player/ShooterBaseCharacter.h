@@ -8,6 +8,7 @@
 
 class UShooterHealthComponent;
 class UShooterWeaponComponent;
+class USoundCue;
 
 UCLASS()
 class SHOOTERCPP_API AShooterBaseCharacter : public ACharacter
@@ -38,6 +39,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Material")
 	FName MaterialColorName = "Paint Color";
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sound")
+	USoundCue* DeathSound;
 
 	virtual void BeginPlay() override;
 	virtual void OnDeath();

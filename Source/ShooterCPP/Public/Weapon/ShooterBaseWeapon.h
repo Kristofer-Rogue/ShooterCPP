@@ -9,6 +9,7 @@
 
 class UNiagaraSystem;
 class UNiagaraComponent;
+class USoundCue;
 
 UCLASS()
 class SHOOTERCPP_API AShooterBaseWeapon : public AActor
@@ -52,6 +53,12 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
 	UNiagaraSystem* MuzzleFX;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sound")
+	USoundCue* FireSound;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sound")
+	USoundCue* NoAmmoSound;
 
 	virtual void BeginPlay() override;
 	virtual bool GetTraceData(FVector& TraceStart, FVector& TraceEnd) const;

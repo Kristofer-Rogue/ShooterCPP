@@ -5,6 +5,9 @@
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
 #include "GameFramework/Controller.h"
+#include "Sound/SoundCue.h"
+#include "Kismet/GameplayStatics.h"
+#include "Components/AudioComponent.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogRifleWeapon, All, All);
 
@@ -21,7 +24,7 @@ void AShooterRifleWeapon::BeginPlay()
 
 void AShooterRifleWeapon::StartFire()
 {
-	InitMuzzleFX();
+	InitFX();
 	GetWorldTimerManager().SetTimer(ShotTimerHandle, this, &AShooterRifleWeapon::MakeShot, TimeBetweenShots, true);
 	MakeShot();
 }
@@ -29,13 +32,19 @@ void AShooterRifleWeapon::StartFire()
 void AShooterRifleWeapon::StopFire()
 {
 	GetWorldTimerManager().ClearTimer(ShotTimerHandle);
-	SetMuzzleFXVisibility(false);
+	SetFXActive(false);
 }
 
 void AShooterRifleWeapon::MakeShot()
 {
-	if (!GetWorld() || IsAmmoEmpty())
+	if (!GetWorld())
 	{
+		StopFire();
+		return;
+	}
+	if (IsAmmoEmpty())
+	{
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), NoAmmoSound, GetActorLocation());
 		StopFire();
 		return;
 	}
@@ -62,13 +71,18 @@ void AShooterRifleWeapon::MakeShot()
 	DecreaseAmmo();
 }
 
-void AShooterRifleWeapon::InitMuzzleFX()
+void AShooterRifleWeapon::InitFX()
 {
 	if (!MuzzleFXComponent)
 	{
 		MuzzleFXComponent = SpawnMuzzleFX();
 	}
-	SetMuzzleFXVisibility(true);
+
+	if (!FireAudioComponent)
+	{
+		FireAudioComponent = UGameplayStatics::SpawnSoundAttached(FireSound, WeaponMesh, MuzzleSocketName);
+	}
+	SetFXActive(true);
 }
 
 void AShooterRifleWeapon::SpawnTraceFX(const FVector& TraceStart, const FVector& TraceEnd)
@@ -80,12 +94,17 @@ void AShooterRifleWeapon::SpawnTraceFX(const FVector& TraceStart, const FVector&
 	}
 }
 
-void AShooterRifleWeapon::SetMuzzleFXVisibility(bool Visibility)
+void AShooterRifleWeapon::SetFXActive(bool IsActive)
 { 
 	if (MuzzleFXComponent)
 	{
-		MuzzleFXComponent->SetPaused(!Visibility);
-		MuzzleFXComponent->SetVisibility(Visibility, true);
+		MuzzleFXComponent->SetPaused(!IsActive);
+		MuzzleFXComponent->SetVisibility(IsActive, true);
+	}
+
+	if (FireAudioComponent)
+	{
+		IsActive ? FireAudioComponent->Play() : FireAudioComponent->Stop();
 	}
 }
 
