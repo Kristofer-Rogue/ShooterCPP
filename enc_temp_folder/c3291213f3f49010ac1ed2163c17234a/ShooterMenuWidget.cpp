@@ -7,7 +7,6 @@
 #include "ShooterGameInstance.h"
 #include "Menu/UI/ShooterLevelItemWidget.h"
 #include "Kismet/KismetSystemLibrary.h"
-#include "Sound/SoundCue.h"
 
 void UShooterMenuWidget::NativeOnInitialized()
 {
@@ -40,7 +39,6 @@ void UShooterMenuWidget::OnAnimationFinished_Implementation(const UWidgetAnimati
 void UShooterMenuWidget::OnStartGame()
 {
 	PlayAnimation(HideAnimation);
-	UGameplayStatics::PlaySound2D(GetWorld(), StartGameSound);
 }
 
 void UShooterMenuWidget::OnQuitGame()
