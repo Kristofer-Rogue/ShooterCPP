@@ -2,16 +2,17 @@
 
 
 #include "Menu/UI/ShooterMenuHUD.h"
-#include "Blueprint/UserWidget.h"
+#include "UI/ShooterBaseWidget.h"
 
 void AShooterMenuHUD::BeginPlay()
 {
 	if (MenuWidgetClass)
 	{
-		const auto MenuWidget = CreateWidget<UUserWidget>(GetWorld(), MenuWidgetClass);
+		const auto MenuWidget = CreateWidget<UShooterBaseWidget>(GetWorld(), MenuWidgetClass);
 		if (MenuWidget)
 		{
 			MenuWidget->AddToViewport();
+			MenuWidget->Show();
 		}
 	}
 }

@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Blueprint/UserWidget.h"
+#include "UI/ShooterBaseWidget.h"
 #include "ShooterCoreTypes.h"
 #include "ShooterMenuWidget.generated.h"
 
@@ -13,7 +13,7 @@ class UShooterGameInstance;
 class UShooterLevelItemWidget;
 
 UCLASS()
-class SHOOTERCPP_API UShooterMenuWidget : public UUserWidget
+class SHOOTERCPP_API UShooterMenuWidget : public UShooterBaseWidget
 {
 	GENERATED_BODY()
 
@@ -30,7 +30,11 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
 	TSubclassOf<UUserWidget> LevelItemWidgetClass;
 
+	UPROPERTY(meta = (BindWidgetAnim), Transient)
+	UWidgetAnimation* HideAnimation;
+
 	virtual void NativeOnInitialized() override;
+	virtual void OnAnimationFinished_Implementation(const UWidgetAnimation* Animation);
 	 
 private:
 	UPROPERTY()

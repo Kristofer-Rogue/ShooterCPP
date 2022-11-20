@@ -2,7 +2,7 @@
 
 #include "UI/ShooterGameHUD.h"
 #include "Engine/Canvas.h"
-#include "Blueprint/UserWidget.h"
+#include "UI/ShooterBaseWidget.h"
 #include "Player/ShooterPlayerHUDWidget.h"
 #include "ShooterGameModeBase.h"
 
@@ -19,9 +19,9 @@ void AShooterGameHUD::BeginPlay()
 {
 	Super::BeginPlay();
 
-	GameWidgets.Add(EShooterMatchState::InProgress, CreateWidget<UUserWidget>(GetWorld(), PlayerHUDWidgetClass));
-	GameWidgets.Add(EShooterMatchState::Pause, CreateWidget<UUserWidget>(GetWorld(), PauseWidgetClass));
-	GameWidgets.Add(EShooterMatchState::GameOver, CreateWidget<UUserWidget>(GetWorld(), GameOverWidgetClass));
+	GameWidgets.Add(EShooterMatchState::InProgress, CreateWidget<UShooterBaseWidget>(GetWorld(), PlayerHUDWidgetClass));
+	GameWidgets.Add(EShooterMatchState::Pause, CreateWidget<UShooterBaseWidget>(GetWorld(), PauseWidgetClass));
+	GameWidgets.Add(EShooterMatchState::GameOver, CreateWidget<UShooterBaseWidget>(GetWorld(), GameOverWidgetClass));
 
 	for (auto GameWidgetPair : GameWidgets)
 	{
@@ -70,5 +70,6 @@ void AShooterGameHUD::OnMatchStateChanged(EShooterMatchState State)
 	if (CurrentWidget)
 	{
 		CurrentWidget->SetVisibility(ESlateVisibility::Visible);
+		CurrentWidget->Show();
 	}
 }

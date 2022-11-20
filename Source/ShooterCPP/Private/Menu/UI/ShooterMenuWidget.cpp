@@ -24,13 +24,21 @@ void UShooterMenuWidget::NativeOnInitialized()
 	InitLevelItems();
 }
 
-void UShooterMenuWidget::OnStartGame()
+void UShooterMenuWidget::OnAnimationFinished_Implementation(const UWidgetAnimation* Animation)
 {
+	if (Animation != HideAnimation)
+		return;
+
 	const auto ShooterGameInstance = GetShooterGameInstance();
 	if (!ShooterGameInstance)
 		return;
 
 	UGameplayStatics::OpenLevel(this, ShooterGameInstance->GetStartupLevel().LevelName);
+}
+
+void UShooterMenuWidget::OnStartGame()
+{
+	PlayAnimation(HideAnimation);
 }
 
 void UShooterMenuWidget::OnQuitGame()

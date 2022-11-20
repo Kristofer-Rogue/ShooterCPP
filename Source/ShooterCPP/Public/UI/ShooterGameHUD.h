@@ -7,6 +7,8 @@
 #include "ShooterCoreTypes.h"
 #include "ShooterGameHUD.generated.h"
 
+class UShooterBaseWidget;
+
 UCLASS()
 class SHOOTERCPP_API AShooterGameHUD : public AHUD
 {
@@ -29,10 +31,10 @@ protected:
 
 private:
 	UPROPERTY()
-	TMap<EShooterMatchState, UUserWidget*> GameWidgets;
+	TMap<EShooterMatchState, UShooterBaseWidget*> GameWidgets;
 
 	UPROPERTY()
-	UUserWidget* CurrentWidget = nullptr;
+	UShooterBaseWidget* CurrentWidget = nullptr;
 
 	void DrawCrossHair();
 	void OnMatchStateChanged(EShooterMatchState State);
