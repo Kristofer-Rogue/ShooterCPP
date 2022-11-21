@@ -48,21 +48,19 @@ void AShooterGameModeBase::Killed(AController* KillerController, AController* Vi
 	const auto KillerPlayerState = KillerController ? Cast<AShooterPlayerState>(KillerController->PlayerState) : nullptr;
 	const auto VictimPlayerState = VictimController ? Cast<AShooterPlayerState>(VictimController->PlayerState) : nullptr;
 
+	StartRespawn(VictimController);
+
+	if (!KillerPlayerState || !VictimPlayerState)
+		return;
 
 	if (KillerPlayerState == VictimPlayerState)
 	{
-		KillerPlayerState->AddDeath();
-	}
-	else if (KillerPlayerState)
-	{
-		KillerPlayerState->AddKill();
-	}
-	else if (VictimPlayerState)
-	{
-		VictimPlayerState->AddDeath();
+		KillerPlayerState->ReduceKill();
+		return;
 	}
 
-	StartRespawn(VictimController);
+	KillerPlayerState->AddKill();
+	VictimPlayerState->AddDeath();
 }
 
 void AShooterGameModeBase::RespawnRequest(AController* Controller)

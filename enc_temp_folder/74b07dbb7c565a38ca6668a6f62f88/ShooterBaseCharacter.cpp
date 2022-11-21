@@ -123,6 +123,6 @@ void AShooterBaseCharacter::OnGroundLanded(const FHitResult& Hit)
 
 	FPointDamageEvent PointDamageEvent;
 	PointDamageEvent.HitInfo = Hit;
-	TakeDamage(FinalDamage, PointDamageEvent, Controller, nullptr);
+	TakeDamage(FinalDamage, PointDamageEvent, nullptr, nullptr);
 }
  
