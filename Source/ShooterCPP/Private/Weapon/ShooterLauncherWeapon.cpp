@@ -28,7 +28,6 @@ void AShooterLauncherWeapon::MakeShot()
 	if (!GetTraceData(TraceStart, TraceEnd))
 		return;
 
-	UE_LOG(LauncherWeapon, Display, TEXT("LaucherStrike"));
 	FHitResult HitResult;
 	MakeHit(HitResult, TraceStart, TraceEnd);
 

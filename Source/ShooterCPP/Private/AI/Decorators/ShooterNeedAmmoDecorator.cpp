@@ -22,6 +22,5 @@ bool UShooterNeedAmmoDecorator::CalculateRawConditionValue(UBehaviorTreeComponen
 	if (!WeaponComponent)
 		return false;
 
-	//UE_LOG(LogNeedAmmo, Display, TEXT("%s"), WeaponComponent->NeedAmmo(WeaponType) ? "true" : "false");
 	return WeaponComponent->NeedAmmo(WeaponType);
 }

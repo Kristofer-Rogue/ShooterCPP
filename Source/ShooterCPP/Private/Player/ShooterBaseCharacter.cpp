@@ -8,6 +8,7 @@
 #include "Components/ShooterWeaponComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Sound/SoundCue.h"
+#include "ShooterGameModeBase.h"
 #include "Kismet/GameplayStatics.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogBaseCharacter, All, All);
@@ -84,10 +85,6 @@ void AShooterBaseCharacter::SetPlayerColor(const FLinearColor& Color)
 
 void AShooterBaseCharacter::OnDeath()
 {
-	UE_LOG(LogBaseCharacter, Display, TEXT("Player %s is dead"), *GetName());
-
-	// PlayAnimMontage(DeathAnimMontage);
-
 	GetCharacterMovement()->DisableMovement();
 
 	SetLifeSpan(LifeSpanOnDeath);
@@ -104,12 +101,28 @@ void AShooterBaseCharacter::OnHealthChanged(float Health, float HealthDelta)
 {
 }
 
+void AShooterBaseCharacter::FellOutOfWorld(const UDamageType& dmgType)
+{
+	//const auto GameMode = Cast<AShooterGameModeBase>(GetWorld()->GetAuthGameMode());
+	//OnDeath();
+	//GameMode->RespawnRequest(Controller);
+	FHitResult HitResult;
+	FPointDamageEvent PointDamageEvent;
+	PointDamageEvent.HitInfo = HitResult;
+	TakeDamage(HealthComponent->GetHealth(), PointDamageEvent, GetController(), this);
+}
+
 void AShooterBaseCharacter::OnGroundLanded(const FHitResult& Hit)
 {
+
 	const auto FallVelocityZ = -GetVelocity().Z;
 	if (FallVelocityZ < LandedDamageVelocity.X)
 		return;
 
 	const auto FinalDamage = FMath::GetMappedRangeValueUnclamped(LandedDamageVelocity, LandedDamage, FallVelocityZ);
-	TakeDamage(FinalDamage, FDamageEvent{}, nullptr, nullptr);
+
+	FPointDamageEvent PointDamageEvent;
+	PointDamageEvent.HitInfo = Hit;
+	TakeDamage(FinalDamage, PointDamageEvent, nullptr, nullptr);
 }
+ 

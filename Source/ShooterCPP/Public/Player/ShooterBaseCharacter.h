@@ -25,9 +25,6 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	UShooterWeaponComponent* WeaponComponent;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Animation")
-	UAnimMontage* DeathAnimMontage;
-
 	UPROPERTY(EditDefaultsOnly, Category = "Damage")
 	float LifeSpanOnDeath = 5.0f;
 
@@ -46,6 +43,7 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void OnDeath();
 	virtual void OnHealthChanged(float Health, float HealthDelta);
+	virtual void FellOutOfWorld(const class UDamageType& dmgType) override;
 
 public:
 	virtual void Tick(float DeltaTime) override;

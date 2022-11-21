@@ -107,13 +107,11 @@ void AShooterBaseWeapon::DecreaseAmmo()
 	CurrentAmmo.Bullets--;
 	if (IsClipEmpty())
 	{
-		UE_LOG(LogBaseWeapon, Warning, TEXT("in if"));
 		StopFire();
 		if (CurrentAmmo.Infinite || CurrentAmmo.Clips > 0)
 			OnClipEmpty.Broadcast();
 	}
-	LogAmmo();
-} 
+}
 
 bool AShooterBaseWeapon::IsAmmoEmpty() const
 {
@@ -127,8 +125,7 @@ bool AShooterBaseWeapon::IsClipEmpty() const
 
 bool AShooterBaseWeapon::IsAmmoFull() const
 {
-	return CurrentAmmo.Clips == DefaultAmmo.Clips && 
-		CurrentAmmo.Bullets == DefaultAmmo.Bullets;
+	return CurrentAmmo.Clips == DefaultAmmo.Clips && CurrentAmmo.Bullets == DefaultAmmo.Bullets;
 }
 
 bool AShooterBaseWeapon::NeedAmmo() const
@@ -141,14 +138,10 @@ void AShooterBaseWeapon::ChangeClip()
 	if (!CurrentAmmo.Infinite)
 	{
 		if (CurrentAmmo.Clips == 0)
-		{
-			UE_LOG(LogBaseWeapon, Warning, TEXT("No more clips"));
 			return;
-		}
 		CurrentAmmo.Clips--;
 	}
 	CurrentAmmo.Bullets = DefaultAmmo.Bullets;
-	UE_LOG(LogBaseWeapon, Display, TEXT("Change Clip"));
 }
 
 bool AShooterBaseWeapon::CanReload() const
@@ -158,7 +151,6 @@ bool AShooterBaseWeapon::CanReload() const
 
 bool AShooterBaseWeapon::TryToAddAmmo(int32 ClipsAmount)
 {
-	UE_LOG(LogBaseWeapon, Display, TEXT("here"));
 	if (CurrentAmmo.Infinite || IsAmmoFull() || ClipsAmount <= 0)
 		return false;
 
