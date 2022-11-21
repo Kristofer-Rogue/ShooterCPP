@@ -10,6 +10,7 @@
 #include "Components/ShooterRespawnComponent.h"
 #include "EngineUtils.h"
 #include "ShooterGameInstance.h"
+#include "Components/ShooterWeaponComponent.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogShooterGameModeBase, All, All);
 
@@ -70,6 +71,7 @@ bool AShooterGameModeBase::SetPause(APlayerController* PC, FCanUnpause CanUnpaus
 
 	if (PauseSet)
 	{
+		StopAllFire();
 		SetMatchState(EShooterMatchState::Pause);
 	}
 	return PauseSet;
@@ -153,7 +155,7 @@ void AShooterGameModeBase::CreateTeamsInfo()
 	if (!GetWorld())
 		return;
 
-	//logic for 2 teams
+	// logic for 2 teams
 
 	int32 TeamID = 1;
 	for (auto It = GetWorld()->GetControllerIterator(); It; It++)
@@ -168,7 +170,7 @@ void AShooterGameModeBase::CreateTeamsInfo()
 
 		PlayerState->SetTeamID(TeamID);
 		PlayerState->SetTeamColor(DetermineColorByTeamID(TeamID));
-		PlayerState->SetPlayerName(Controller->IsPlayerController() ? "Player" : "Bot"); //TODO: bots name array
+		PlayerState->SetPlayerName(Controller->IsPlayerController() ? "Player" : "Bot"); // TODO: bots name array
 		SetPlayerColor(Controller);
 
 		TeamID = TeamID == 1 ? 2 : 1;
@@ -177,7 +179,7 @@ void AShooterGameModeBase::CreateTeamsInfo()
 
 FLinearColor AShooterGameModeBase::DetermineColorByTeamID(int32 TeamID) const
 {
-	if (TeamID -1 < GameData.TeamColors.Num())
+	if (TeamID - 1 < GameData.TeamColors.Num())
 	{
 		return GameData.TeamColors[TeamID - 1];
 	}
@@ -254,4 +256,17 @@ void AShooterGameModeBase::SetMatchState(EShooterMatchState State)
 
 	MatchState = State;
 	OnMatchStateChanged.Broadcast(MatchState);
+}
+
+void AShooterGameModeBase::StopAllFire()
+{
+	for (auto Pawn : TActorRange<APawn>(GetWorld()))
+	{
+		const auto WeaponComponent = ShooterUtils::GetShooterPlayerComponent<UShooterWeaponComponent>(Pawn);
+		if (!WeaponComponent)
+			continue;
+
+		WeaponComponent->StopFire();
+		WeaponComponent->Zoom(false);
+	}
 }

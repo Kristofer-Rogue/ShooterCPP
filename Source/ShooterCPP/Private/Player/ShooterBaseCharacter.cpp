@@ -43,6 +43,20 @@ void AShooterBaseCharacter::Tick(float DeltaTime)
 	const auto Health = HealthComponent->GetHealth();
 }
 
+void AShooterBaseCharacter::TurnOff()
+{
+	WeaponComponent->StopFire();
+	WeaponComponent->Zoom(false);
+	Super::TurnOff();
+}
+
+void AShooterBaseCharacter::Reset()
+{
+	WeaponComponent->StopFire();
+	WeaponComponent->Zoom(false);
+	Super::Reset();
+}
+
 bool AShooterBaseCharacter::IsRunning() const
 {
 	return false;

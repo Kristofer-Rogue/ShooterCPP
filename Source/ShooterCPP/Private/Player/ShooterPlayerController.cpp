@@ -13,8 +13,7 @@ void AShooterPlayerController::BeginPlay()
 {
 	if (GetWorld())
 	{
-		const auto GameMode = Cast<AShooterGameModeBase>(GetWorld()->GetAuthGameMode());
-		if (GameMode)
+		if (const auto GameMode = Cast<AShooterGameModeBase>(GetWorld()->GetAuthGameMode()))
 		{
 			GameMode->OnMatchStateChanged.AddUObject(this, &AShooterPlayerController::OnMatchStateChanged);
 		}

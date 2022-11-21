@@ -67,4 +67,6 @@ private:
 	void GameOver();
 
 	void SetMatchState(EShooterMatchState State);
+
+	void StopAllFire();
 };
