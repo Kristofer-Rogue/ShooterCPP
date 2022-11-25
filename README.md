@@ -4,7 +4,7 @@
 
 <p align="center">
    <img src="https://img.shields.io/badge/Engine-UE5.1-lightgrey" alt="Unreal Engine Version">
-   <img src="https://img.shields.io/badge/Version-0.1Alpha-orange" alt="Game Version">
+   <img src="https://img.shields.io/badge/Version-0.0.1--alpha-orange" alt="Game Version">
 </p>
 
 ## About
