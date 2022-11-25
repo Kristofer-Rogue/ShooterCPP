@@ -11,11 +11,6 @@
 
 This project is inspired by shooters like Quake and Unreal Tournament. The entire logic of the game is implemented using C++, except for some moments in which the use of blueprints is justified (Behavior Tree, Sound Classes, e.t.c.).
 
-## Distribute
-
-- [Service Name](Page Link)
-
-
 ## Developers
 
 - [Kristofer Rogue](https://github.com/kristof-game)
